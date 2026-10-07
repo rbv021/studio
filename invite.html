@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Приглашение</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+html, body { margin: 0; height: 100%; background: #14110e; color: #f6f1e8; font-family: Manrope, sans-serif; }
+.stage { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(2px) brightness(.45); }
+.card { position: relative; width: min(92vw, 420px); }
+.poster, .clip { width: 100%; border-radius: 18px; display: block; background: #1b1612; }
+.clip { display: none; }
+.hint { text-align: center; letter-spacing: .14em; text-transform: uppercase; font-size: 12px; opacity: .8; margin-top: 14px; }
+.letter { display: none; text-align: center; padding: 28px 18px 18px; }
+.letter h1 { font-family: "Cormorant Garamond", serif; font-weight: 500; font-size: 52px; line-height: .95; margin: 8px 0; }
+.kicker { letter-spacing: .22em; text-transform: uppercase; font-size: 12px; color: #d7c09a; }
+.meta { opacity: .85; }
+.lock { position: absolute; inset: 0; display: none; align-items: flex-end; padding: 16px; background: linear-gradient(transparent, rgba(0,0,0,.72)); border-radius: 18px; }
+.lock b { font-family: "Cormorant Garamond", serif; font-size: 36px; font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <video class="bg" id="bg" muted loop playsinline></video>
+  <div class="card" id="card">
+    <img class="poster" id="poster" alt="конверт">
+    <video class="clip" id="clip" playsinline></video>
+    <p class="hint" id="hint">Нажмите на печать</p>
+    <div class="letter" id="letter">
+      <div class="kicker" id="kind"></div>
+      <h1 id="names"></h1>
+      <p class="meta" id="when"></p>
+      <p class="meta" id="where"></p>
+    </div>
+    <div class="lock" id="lock"><div><b>99 000</b><div>Ссылка откроется после оплаты</div></div></div>
+  </div>
+</div>
+<script>
+const T = {
+  lace: ["photo_2026-10-07_22-45-50.jpg", "IMG_0664.MP4", "IMG_0694.MP4"],
+  wine: ["photo_2026-10-07_22-46-02.jpg", "IMG_0668.MP4", "IMG_0683.MP4"],
+  rings: ["photo_2026-10-07_22-46-29.jpg", "IMG_0681.MP4", "IMG_0670.MP4"],
+  gold: ["photo_2026-10-07_22-46-44.jpg", "IMG_0696.MP4", "IMG_0737.MP4"]
+};
+const names = { toy: "Свадьба", fotiha: "Фотиха", zags: "ЗАГС", bday: "День рождения", sanduq: "Sanduq party" };
+const q = new URLSearchParams(location.search);
+const tpl = T[q.get("tpl")] || T.gold;
+const open = q.get("ok") === "1";
+document.getElementById("poster").src = tpl[0];
+document.getElementById("clip").src = tpl[1];
+document.getElementById("bg").src = tpl[2];
+document.getElementById("kind").textContent = names[q.get("type")] || "Приглашение";
+document.getElementById("names").textContent = [q.get("g"), q.get("b")].filter(Boolean).join(" & ") || "Имена";
+document.getElementById("when").textContent = [q.get("d"), q.get("tm")].filter(Boolean).join(" · ");
+document.getElementById("where").textContent = [q.get("p"), q.get("c")].filter(Boolean).join(", ");
+if (!open) document.getElementById("lock").style.display = "flex";
+document.getElementById("card").onclick = () => {
+  const clip = document.getElementById("clip");
+  const poster = document.getElementById("poster");
+  poster.style.display = "none";
+  clip.style.display = "block";
+  document.getElementById("hint").style.display = "none";
+  clip.play().catch(() => {});
+  document.getElementById("bg").play().catch(() => {});
+  clip.onended = show;
+  setTimeout(show, 4500);
+};
+function show() {
+  if (!open) return;
+  document.getElementById("clip").style.display = "none";
+  document.getElementById("letter").style.display = "block";
+}
+</script>
+</body>
+</html>
