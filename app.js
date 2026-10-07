@@ -46,7 +46,7 @@ function link(open) {
 }
 function tg() {
   const id = Math.random().toString(36).slice(2, 7).toUpperCase();
-  const text = `Buyurtma ${id}\n${state.groom} & ${state.bride}\n${state.type} ${state.date} ${state.time}\n${state.place}, ${state.city}\n99 000\n${location.href.replace(/index\.html$/, "")}${link(true)}`;
+  const text = `Buyurtma ${id}\n${state.groom} & ${state.bride}\n${state.type} ${state.date} ${state.time}\n${state.place}, ${state.city}\n99 000\nok: keyin`;
   return `https://t.me/${CONFIG.telegram}?text=${encodeURIComponent(text)}`;
 }
 function render() {
